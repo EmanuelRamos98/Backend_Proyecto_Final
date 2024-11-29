@@ -1,6 +1,8 @@
 import express from 'express'
 import statusRoute from './Routes/status.routes.js'
 import authRouter from './Routes/auth.routes.js'
+import mongoose from './Config/db.config.js'
+
 
 const PORT = 3030
 const app = express()

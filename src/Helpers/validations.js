@@ -39,7 +39,7 @@ class Validations {
         if (!regex.test(valor)) {
             this.errores.push({
                 field: field_name,
-                message: `El formato del correo electrónico en ${field_name} no es válido.`
+                message: `El formato del correo electrónico no es válido.`
             })
         }
         return this;
