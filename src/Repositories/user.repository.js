@@ -1,3 +1,4 @@
+import AppError from "../Helpers/Error/app.error.js";
 import User from "../Models/user.models.js";
 
 class UserRepository {
@@ -13,6 +14,15 @@ class UserRepository {
 
     static async userUpdateByEmail(email, updateData) {
         return User.findOneAndUpdate({ email: email }, updateData)
+    }
+
+    static async userVerificate(email) {
+        const user_to_verify = await User.findOne({ email: email })
+        if (!user_to_verify) {
+            return new AppError('No se encontro el usuario a verificar', 500)
+        }
+        user_to_verify.emailVerified = true
+        return await user_to_verify.save()
     }
 
     static async userDelete(email) {
