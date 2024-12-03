@@ -67,7 +67,7 @@ export const verifiEmailController = async (req, res, next) => {
 
         const payload = jwt.verify(validation_token, ENVIROMENT.SECRET_KEY)
         if (!payload.email) {
-            return next(new AppError('Error de token'), 400)
+            return next(new AppError('Error de token', 400))
         }
 
         const email_to_verify = payload.email
@@ -103,7 +103,7 @@ export const loginController = async (req, res, next) => {
         }
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
-            return next(new AppError('La password es incorrecta'), 404)
+            return next(new AppError('La password es incorrecta', 404))
         }
         if (!user.emailVerified) {
             return next(new AppError('Email no verificado, acceso restringido', 403))
@@ -175,7 +175,39 @@ export const forgotPasswordController = async (req, res, next) => {
 
 export const recoveryPasswordController = async (req, res, next) => {
     try {
-        
+        const { reset_token } = req.params
+        if (!reset_token) {
+            return next(new AppError('No se encotro reset_token', 400))
+        }
+
+        const { password } = req.body
+        if (!password) {
+            return next(new AppError('Todos los campos deben estar llenos', 400))
+        }
+
+        const validador = new Validations({ password })
+        validador
+            .isString('password').max_min_length('password', 8, 20)
+
+        const errores = validador.obtenerErrores()
+        if (errores.length > 0) {
+            return next(new AppError('Error de validacion', 400, errores))
+        }
+
+        const codificado = jwt.verify(reset_token, ENVIROMENT.SECRET_KEY)
+        const passwordHased = await bcrypt.hash(password, 10)
+
+        await UserRepository.userUpdatePassword(codificado.email, passwordHased)
+
+        const response = new ResporderBuilder()
+            .setOk(true)
+            .setStatus(200)
+            .setMessage('Succes')
+            .setPayload({
+                detail: 'Contraseña cambiada con exito'
+            })
+            .build()
+        return res.status(200).json(response)
     } catch (error) {
         next(error)
     }

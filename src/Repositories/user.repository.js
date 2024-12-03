@@ -16,6 +16,15 @@ class UserRepository {
         return User.findOneAndUpdate({ email: email }, updateData)
     }
 
+    static async userUpdatePassword(email, new_password) {
+        const user = await User.findOne({ email: email })
+        if (!user) {
+            return new AppError('No se encontro el usuario', 500)
+        }
+        user.password = new_password
+        return await user.save()
+    }
+
     static async userVerificate(email) {
         const user_to_verify = await User.findOne({ email: email })
         if (!user_to_verify) {
