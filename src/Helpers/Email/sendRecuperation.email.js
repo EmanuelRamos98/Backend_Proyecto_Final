@@ -4,13 +4,13 @@ import ENVIROMENT from '../../Config/enviroment.js'
 
 
 const sendRecuperationEmail = async (email) => {
-    const validationToken = jwt.sign(
+    const reset_token = jwt.sign(
         { email: email },
         ENVIROMENT.SECRET_KEY,
         { expiresIn: '1d' }
     )
 
-    const resetUrl = `http://localhost:3030/api/auth/recovery-password/${validationToken}`
+    const resetUrl = `${ENVIROMENT.FRONTEND_URL}/auth/recovery-password/${reset_token}`
 
     const result = await transporterEmail.sendMail({
         subject: 'Recuperar Contraseña',

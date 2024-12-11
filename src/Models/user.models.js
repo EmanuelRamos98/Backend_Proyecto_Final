@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         estado: {
             type: String,
@@ -34,7 +35,13 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: 'user',
             required: true
-        }
+        },
+        contacts:[
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     },
     {
         timestamps: true

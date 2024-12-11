@@ -8,6 +8,32 @@ class UserRepository {
         return await new_user.save()
     }
 
+    static async addContact(user_id, contac_id) {
+        return User.findByIdAndUpdate(user_id, {
+            $push: {
+                contacts: contac_id
+            }
+        })
+    }
+
+    static async findUserById(user_id){
+        return User.findById(user_id)
+    }
+
+    static async findUserByUsername(name) {
+        return User.findOne({ name: name })
+    }
+
+    static async findContacts(user_id){
+        return User.findById(user_id).populate('contacts', 'name')
+    }
+
+
+    static async getAllUsers() {
+        return User.find({ activo: true })
+    }
+
+
     static async getUserByEmail(email) {
         return User.findOne({ email: email })
     }

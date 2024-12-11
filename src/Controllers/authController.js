@@ -139,6 +139,37 @@ export const loginController = async (req, res, next) => {
     }
 }
 
+export const getAllUsersController = async (req, res, next) => {
+    try {
+        const users = await UserRepository.getAllUsers()
+        if (!users) {
+            return next(new AppError('No se encontraron usuarios', 404))
+        }
+        const filteredUser = users.map(user=>{
+            return{
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                estado: user.estado,
+                role: user.role
+            }
+        })
+
+        const response = new ResporderBuilder()
+            .setOk(true)
+            .setStatus(200)
+            .setMessage('Succes')
+            .setPayload({
+                users: filteredUser
+            })
+            .build()
+        return res.status(200).json(response)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const forgotPasswordController = async (req, res, next) => {
     try {
         const { email } = req.body
