@@ -34,6 +34,7 @@ export const getConversation = async (req, res, next) => {
         const { receiverId } = req.params
 
         const conversation = await MessageRepository.findMessagesBetweenUsers(user_id, receiverId)
+
         const response = new ResporderBuilder()
             .setOk(true)
             .setStatus(200)

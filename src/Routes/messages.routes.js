@@ -5,8 +5,8 @@ import autMiddleware from '../Middlewares/auth.middleware.js'
 
 const messageRouter = express.Router()
 
-messageRouter.post('/send', autMiddleware, createMessage)
 messageRouter.get('/conversation/:receiverId', autMiddleware, getConversation)
+messageRouter.post('/send', autMiddleware, createMessage)
 
 
 

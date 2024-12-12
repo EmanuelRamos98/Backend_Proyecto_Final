@@ -114,6 +114,7 @@ export const loginController = async (req, res, next) => {
                 user_id: user.id,
                 name: user.name,
                 email: user.email,
+                contacts: user.contacts,
                 role: user.role,
             },
             ENVIROMENT.SECRET_KEY,
@@ -145,8 +146,8 @@ export const getAllUsersController = async (req, res, next) => {
         if (!users) {
             return next(new AppError('No se encontraron usuarios', 404))
         }
-        const filteredUser = users.map(user=>{
-            return{
+        const filteredUser = users.map(user => {
+            return {
                 id: user._id,
                 name: user.name,
                 email: user.email,
