@@ -1,5 +1,5 @@
 import express from 'express'
-import { forgotPasswordController, getAllUsersController, loginController, recoveryPasswordController, registerController, verifiEmailController } from '../Controllers/authController.js'
+import { forgotPasswordController, getAllUsersController, loginController, recoveryPasswordController, registerController, revalidationController, verifiEmailController } from '../Controllers/authController.js'
 
 const authRouter = express.Router()
 
@@ -12,6 +12,8 @@ authRouter.post('/login', loginController)
 authRouter.post('/forgot-password', forgotPasswordController)
 
 authRouter.put('/recovery-password/:reset_token', recoveryPasswordController)
+
+authRouter.post('/revalidation/:user_email', revalidationController)
 
 authRouter.get('/users', getAllUsersController)
 

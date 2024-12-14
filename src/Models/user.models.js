@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        image_base64: {
+            type: String,
+            default: ''
+        },
         emailVerified: {
             type: Boolean,
             default: false
@@ -36,7 +40,7 @@ const userSchema = new mongoose.Schema(
             default: 'user',
             required: true
         },
-        contacts:[
+        contacts: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User'

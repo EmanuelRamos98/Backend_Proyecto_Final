@@ -16,7 +16,7 @@ class UserRepository {
         })
     }
 
-    static async findUserById(user_id){
+    static async findUserById(user_id) {
         return User.findById(user_id)
     }
 
@@ -24,7 +24,7 @@ class UserRepository {
         return User.findOne({ name: name })
     }
 
-    static async findContacts(user_id){
+    static async findContacts(user_id) {
         return User.findById(user_id).populate('contacts', 'name')
     }
 
@@ -33,13 +33,15 @@ class UserRepository {
         return User.find({ activo: true })
     }
 
-
     static async getUserByEmail(email) {
         return User.findOne({ email: email })
     }
 
-    static async userUpdateByEmail(email, updateData) {
-        return User.findOneAndUpdate({ email: email }, updateData)
+    static async userUpdateById(user_id, updateData) {
+        return User.findByIdAndUpdate(user_id,
+            { $set: updateData },
+            { new: true }
+        )
     }
 
     static async userUpdatePassword(email, new_password) {

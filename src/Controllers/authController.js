@@ -23,7 +23,7 @@ export const registerController = async (req, res, next) => {
             .isString('password').max_min_length('password', 8, 20)
             .isEmail('email')
 
-        const errores = validador.obtenerErrores();
+        const errores = validador.obtenerErrores()
         if (errores.length > 0) {
             return next(new AppError('Errores de validación', 400, errores))
         }
@@ -106,7 +106,16 @@ export const loginController = async (req, res, next) => {
             return next(new AppError('La password es incorrecta', 404))
         }
         if (!user.emailVerified) {
-            return next(new AppError('Email no verificado, acceso restringido', 403))
+            await sendValidationEmail(email, user.name)
+            const response = new ResporderBuilder()
+                .setOk(false)
+                .setStatus(403)
+                .setMessage('Usuario no verificado')
+                .setPayload({
+                    email: user.email
+                })
+                .build()
+            return res.status(403).json(response)
         }
 
         const accesToken = jwt.sign(
@@ -114,7 +123,6 @@ export const loginController = async (req, res, next) => {
                 user_id: user.id,
                 name: user.name,
                 email: user.email,
-                contacts: user.contacts,
                 role: user.role,
             },
             ENVIROMENT.SECRET_KEY,
@@ -238,6 +246,32 @@ export const recoveryPasswordController = async (req, res, next) => {
             .setPayload({
                 detail: 'Contraseña cambiada con exito'
             })
+            .build()
+        return res.status(200).json(response)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const revalidationController = async (req, res, next) => {
+    try {
+        const { user_email } = req.params
+    
+        if (!user_email) {
+            return next(new AppError('No se encontro email', 404))
+        }
+
+        const user = await UserRepository.getUserByEmail(user_email)
+        if (!user) {
+            return next(new AppError('User not found', 404))
+        }
+
+        await sendValidationEmail(user_email, user.name)
+
+        const response = new ResporderBuilder()
+            .setOk(true)
+            .setStatus(200)
+            .setMessage('Sucess')
             .build()
         return res.status(200).json(response)
     } catch (error) {
