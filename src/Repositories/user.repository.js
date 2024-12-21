@@ -8,12 +8,14 @@ class UserRepository {
         return await new_user.save()
     }
 
-    static async addContact(user_id, contac_id) {
+    static async addContact(user_id, contac_data) {
         return User.findByIdAndUpdate(user_id, {
             $push: {
-                contacts: contac_id
+                contacts: contac_data
             }
-        })
+        },
+            { new: true }
+        )
     }
 
     static async findUserById(user_id) {
@@ -25,7 +27,7 @@ class UserRepository {
     }
 
     static async findContacts(user_id) {
-        return User.findById(user_id).populate('contacts', 'name')
+        return User.findById(user_id).populate('contacts.contactId', 'name image_base64 estado')
     }
 
 

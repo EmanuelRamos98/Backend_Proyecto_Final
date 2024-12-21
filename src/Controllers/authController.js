@@ -73,7 +73,7 @@ export const verifiEmailController = async (req, res, next) => {
         const email_to_verify = payload.email
         await UserRepository.userVerificate(email_to_verify)
 
-        res.sendStatus(200)
+        return res.redirect('/')
     } catch (error) {
         next(error)
     }
@@ -182,6 +182,9 @@ export const getAllUsersController = async (req, res, next) => {
 export const forgotPasswordController = async (req, res, next) => {
     try {
         const { email } = req.body
+        if (!email) {
+            return next(new AppError('Todos los campos deben estar completos', 400))
+        }
         const validador = new Validations({ email })
 
         validador
@@ -256,7 +259,6 @@ export const recoveryPasswordController = async (req, res, next) => {
 export const revalidationController = async (req, res, next) => {
     try {
         const { user_email } = req.params
-    
         if (!user_email) {
             return next(new AppError('No se encontro email', 404))
         }

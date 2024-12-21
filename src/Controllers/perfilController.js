@@ -19,7 +19,8 @@ export const getPerfilController = async (req, res, next) => {
             id: user._id,
             name: user.name,
             email: user.email,
-            estado: user.estado
+            estado: user.estado,
+            img: user.image_base64
         }
         const response = new ResporderBuilder()
             .setOk(true)
@@ -37,18 +38,19 @@ export const getPerfilController = async (req, res, next) => {
 
 export const updatePerfilController = async (req, res, next) => {
     try {
-        const { estado, avatar } = req.body
+        const { estado, image_base64, name } = req.body
         const user_id = req.user.user_id
 
         if (!user_id) {
             next(new AppError('User_id not found', 404))
         }
 
-        const validador = new Validations({ estado })
+        const validador = new Validations({ estado, name, image_base64 })
 
         validador
             .isString('estado').max_min_length('estado', 0, 50)
-
+            .isString('name').max_min_length('name', 4, 20)
+            .isBase64('image_base64')
         const errores = validador.obtenerErrores()
         if (errores.length > 0) {
             next(new AppError('Error de validacion', 400, errores))
@@ -58,8 +60,11 @@ export const updatePerfilController = async (req, res, next) => {
         if (estado) {
             new_data.estado = estado
         }
-        if (avatar) {
-            new_data.avatar = avatar
+        if (image_base64) {
+            new_data.image_base64 = image_base64
+        }
+        if (name) {
+            new_data.name = name
         }
 
         await UserRepository.userUpdateById(user_id, new_data)
@@ -73,6 +78,9 @@ export const updatePerfilController = async (req, res, next) => {
 
 
     } catch (error) {
+        if (error.code === 11000) {
+            return next(new AppError('El user name ya esta en uso', 500))
+        }
         next(error)
     }
 }

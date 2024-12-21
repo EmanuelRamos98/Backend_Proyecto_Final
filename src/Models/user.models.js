@@ -42,8 +42,14 @@ const userSchema = new mongoose.Schema(
         },
         contacts: [
             {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
+                contactId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
+                },
+                image_base64: {
+                    type: String,
+                    default: ''
+                }
             }
         ]
     },

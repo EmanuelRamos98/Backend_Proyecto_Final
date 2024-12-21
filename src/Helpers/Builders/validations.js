@@ -39,10 +39,22 @@ class Validations {
         if (!regex.test(valor)) {
             this.errores.push({
                 field: field_name,
-                message: `El formato del correo electrónico no es válido.`
+                message: 'El formato del correo electrónico no es válido.'
             })
         }
         return this;
+    }
+
+    isBase64(field_name){
+        const valor = this.valor[field_name]
+        const regex =  /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+        if (!regex.test(valor)) {
+            this.errores.push({
+                field: field_name,
+                message: 'El formato base 64 no es valido.'
+            })
+        }
+        return this
     }
 
     obtenerErrores(){
