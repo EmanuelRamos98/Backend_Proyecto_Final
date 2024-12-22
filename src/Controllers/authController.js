@@ -62,7 +62,7 @@ export const verifiEmailController = async (req, res, next) => {
     try {
         const { validation_token } = req.params
         if (!validation_token) {
-            return next(new AppError('No se encontro Validation_token', 404))
+            return next(new AppError('No se encontro validation_token', 404))
         }
 
         const payload = jwt.verify(validation_token, ENVIROMENT.SECRET_KEY)
@@ -73,7 +73,7 @@ export const verifiEmailController = async (req, res, next) => {
         const email_to_verify = payload.email
         await UserRepository.userVerificate(email_to_verify)
 
-        return res.redirect('/')
+        return res.redirect(`${ENVIROMENT.FRONTEND_URL}/login`)
     } catch (error) {
         next(error)
     }

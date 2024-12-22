@@ -3,9 +3,9 @@ import { forgotPasswordController, getAllUsersController, loginController, recov
 
 const authRouter = express.Router()
 
-authRouter.post('/register', registerController)
-
 authRouter.get('/verify-email/:validation_token', verifiEmailController)
+
+authRouter.post('/register', registerController)
 
 authRouter.post('/login', loginController)
 

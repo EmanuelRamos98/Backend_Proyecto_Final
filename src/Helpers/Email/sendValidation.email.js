@@ -4,13 +4,15 @@ import ENVIROMENT from '../../Config/enviroment.js'
 
 
 const sendValidationEmail = async (email, name) => {
-    const validationToken = jwt.sign(
+    const validation_token = jwt.sign(
         { email: email },
         ENVIROMENT.SECRET_KEY,
         { expiresIn: '1d' }
     )
 
-    const redirectUrl = `http://localhost:3030/api/auth/verify-email/${validationToken}`
+    const redirectUrl = `http://localhost:3000/api/auth/verify-email/${validation_token}`
+    console.log(redirectUrl);
+
 
     const result = await transporterEmail.sendMail({
         subject: 'Validacion',
@@ -19,7 +21,7 @@ const sendValidationEmail = async (email, name) => {
             `
             <h1>Valida tu email</h1>
             <h2>Bienvenido ${name}</h2/>
-            <p>Para validar tu email da click <a href='${redirectUrl}'>aqui</a>
+            <p>Para validar tu email da click <a href='${redirectUrl}'>aqui</a></p>
         `
     })
     return result
