@@ -11,7 +11,6 @@ const sendValidationEmail = async (email, name) => {
     )
 
     const redirectUrl = `https://backend-proyecto-final-two.vercel.app/api/auth/verify-email/${validation_token}`
-    console.log(redirectUrl);
 
 
     const result = await transporterEmail.sendMail({
