@@ -10,7 +10,7 @@ const sendValidationEmail = async (email, name) => {
         { expiresIn: '1d' }
     )
 
-    const redirectUrl = `http://localhost:3000/api/auth/verify-email/${validation_token}`
+    const redirectUrl = `${ENVIROMENT.FRONTEND_URL}/api/auth/verify-email/${validation_token}`
 
 
     const result = await transporterEmail.sendMail({
