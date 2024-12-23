@@ -63,11 +63,13 @@ export const addContac = async (req, res, next) => {
         }
 
         const user = await UserRepository.findUserById(user_id)
-        if (user.contacts.includes(user_found._id)) {
+        
+        if (user.contacts.some(contact => contact.contactId.toString() === user_found._id.toString())) {
             return next(new AppError('User already in contacts', 400))
         }
-
         await UserRepository.addContact(user_id, contac_data)
+
+
 
         const response = new ResporderBuilder()
             .setOk(true)
