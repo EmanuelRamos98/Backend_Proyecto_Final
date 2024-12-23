@@ -14,10 +14,11 @@ import { customCorsMiddleware } from './Middlewares/cors.middleware.js'
 
 const PORT = 3000
 const app = express()
+app.use(customCorsMiddleware)
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-app.use(customCorsMiddleware)
 
 app.use(cors())
 app.use(express.json({ limit: '3mb' }))
