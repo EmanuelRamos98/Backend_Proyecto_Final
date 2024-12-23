@@ -10,7 +10,7 @@ const sendValidationEmail = async (email, name) => {
         { expiresIn: '1d' }
     )
 
-    const redirectUrl = `${ENVIROMENT.FRONTEND_URL}/api/auth/verify-email/${validation_token}`
+    const redirectUrl = `https://backend-proyecto-final-iota.vercel.app/api/auth/verify-email/${validation_token}`
 
 
     const result = await transporterEmail.sendMail({
