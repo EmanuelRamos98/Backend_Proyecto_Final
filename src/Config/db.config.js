@@ -3,9 +3,9 @@ import User from "../Models/user.models.js";
 import ENVIROMENT from "./enviroment.js";
 
 
-const MONGO_URL = ENVIROMENT.MONGO_DB +'/'+ ENVIROMENT.MONGO_DB_DATABASE
+const MONGO_URI = ENVIROMENT.MONGO_DB +'/'+ ENVIROMENT.MONGO_DB_DATABASE
 
-mongoose.connect(MONGO_URL, {})
+mongoose.connect(MONGO_URI, {})
     .then(
         () => {
             console.log('Se conecto con exito')
