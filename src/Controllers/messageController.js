@@ -68,3 +68,29 @@ export const getConversation = async (req, res, next) => {
         next(error)
     }
 }
+
+export const deleteConversation = async (req, res, next) => {
+    try {
+        const user_id = req.user.user_id
+        const { receiverId } = req.params
+
+        if (!user_id) {
+            return next(new AppError('Falta el id de usuario', 400))
+        }
+
+        if (!receiverId) {
+            return next(new AppError('Falta el id del contacto', 400))
+        }
+
+        await MessageRepository.deleteConversation(user_id, receiverId)
+
+        const response = new ResporderBuilder()
+            .setOk(true)
+            .setStatus(200)
+            .setMessage('Conversation Delete')
+            .build()
+        res.status(200).json(response)
+    } catch (error) {
+        next(error)
+    }
+}

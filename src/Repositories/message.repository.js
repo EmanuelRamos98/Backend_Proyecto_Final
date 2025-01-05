@@ -17,6 +17,17 @@ class MessageRepository {
         ).sort({ createdAt: 1 })
     }
 
+    static async deleteConversation(user_id_1, user_id_2) {
+        return Message.deleteMany(
+            {
+                $or: [
+                    { authorId: user_id_1, receiverId: user_id_2 },
+                    { authorId: user_id_2, receiverId: user_id_1 }
+                ]
+            }
+        )
+    }
+
     static async isRead(message_id) {
         return Message.findByIdAndUpdate(
             message_id,
